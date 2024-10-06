@@ -5,6 +5,17 @@
     <color name="orange">#FF6D00</color>
     <color name="orangeDark">#DD2C00</color>
     <color name="bottomIndicator">#BF360C</color>
-    <color name="green">#1B5E20</color>
+    <color name="green">#34A93C</color>
     <color name="blue">#0D47A1</color>
+
+
+    <color name="cat1">#009688</color>
+    <color name="cat2">#4CAF50</color>
+    <color name="cat3">#CDDC39</color>
+    <color name="cat4">#FFC107</color>
+    <color name="cat5">#FF9800</color>
+    <color name="cat6">#7E57C2</color>
+
+
+
 </resources>

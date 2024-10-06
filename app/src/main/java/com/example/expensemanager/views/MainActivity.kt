@@ -1,8 +1,9 @@
-package com.example.expensemanager
+package com.example.expensemanager.views
 
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import com.example.expensemanager.R
 import com.example.expensemanager.databinding.ActivityMainBinding
 
 
