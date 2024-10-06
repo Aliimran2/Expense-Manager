@@ -10,13 +10,13 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensemanager.R
+import com.example.expensemanager.adapters.AccountAdapter
 import com.example.expensemanager.adapters.CategoryAdapter
 import com.example.expensemanager.databinding.FragmentAddTransactionBinding
 import com.example.expensemanager.databinding.ListDialogBinding
-import com.example.expensemanager.utils.CategoryListProvider
+import com.example.expensemanager.utils.DataProvider
 import com.example.expensemanager.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.Calendar
 
 
@@ -70,13 +70,10 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
 
         binding.category.setOnClickListener {
             val dialogBinding = ListDialogBinding.inflate(inflater)
-
             val alertDialog = AlertDialog.Builder(requireContext()).create()
             alertDialog.setView(dialogBinding.root)
 
-
-
-            val categoryList =CategoryListProvider.categoryList
+            val categoryList =DataProvider.categoryList
             val catAdapter = CategoryAdapter(requireContext(), categoryList) {cat ->
                 binding.category.setText(cat.category)
                 alertDialog.dismiss()
@@ -87,16 +84,24 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
 
            alertDialog.show()
 
-
-
         }
 
+        binding.account.setOnClickListener {
+            val accountDialogBinding = ListDialogBinding.inflate(inflater)
 
+            val accountAlertDialog = AlertDialog.Builder(requireContext()).create()
+            accountAlertDialog.setView(accountDialogBinding.root)
 
+            val accountList = DataProvider.accountList
+            accountDialogBinding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            accountDialogBinding.recyclerView.adapter = AccountAdapter(requireContext(), accountList){account ->
+                binding.account.setText(account.accountName)
+                accountAlertDialog.dismiss()
+            }
 
+            accountAlertDialog.show()
 
-
-
+        }
 
         return binding.root
 
