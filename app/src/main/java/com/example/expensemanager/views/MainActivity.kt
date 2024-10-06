@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.floatingActionButton.setOnClickListener {
             AddTransactionFragment().show(supportFragmentManager, null)
-            Toast.makeText(this, "added", Toast.LENGTH_SHORT).show()
         }
 
     }
