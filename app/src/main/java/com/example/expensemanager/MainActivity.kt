@@ -2,6 +2,7 @@ package com.example.expensemanager
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.expensemanager.databinding.ActivityMainBinding
 
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.floatingActionButton.setOnClickListener {
             AddTransactionFragment().show(supportFragmentManager, null)
+            Toast.makeText(this, "added", Toast.LENGTH_SHORT).show()
         }
 
     }
