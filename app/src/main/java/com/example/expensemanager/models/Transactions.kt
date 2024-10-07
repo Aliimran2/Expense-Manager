@@ -1,13 +1,19 @@
 package com.example.expensemanager.models
 
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Ignore
+import io.realm.kotlin.types.annotations.PrimaryKey
 import java.util.Date
 
-data class Transactions(
-    val type:String,
-    val category: String,
-    val account : String,
-    val note: String,
-    val amount : Double,
-    val date: Date,
-    val id : Long
-)
+
+ class Transactions : RealmObject {
+     var type: String = ""
+     var category: String = ""
+     var account: String = ""
+     var note: String = ""
+     var amount: Double = 0.0
+     @Ignore
+     var date: Date = Date()  // Initialize with the current date
+     @PrimaryKey
+     var id: Long = 0L
+ }

@@ -22,18 +22,18 @@ object DataProvider {
     }
 
 
-    private fun addTransaction(
-        type: String,
-        category: String,
-        account: String,
-        note: String,
-        amount: Double,
-        date: Date,
-        id: Long
-    ) {
-        val transactions = Transactions(type,category, account, note, amount, date, id)
-        transactionList.add(transactions)
-    }
+//    private fun addTransaction(
+//        type: String,
+//        category: String,
+//        account: String,
+//        note: String,
+//        amount: Double,
+//        date: Date,
+//        id: Long
+//    ) {
+//        val transactions = Transactions(type,category, account, note, amount, date, id)
+//        transactionList.add(transactions)
+//    }
 
     private fun addAccount(amount: Double, accountName: String) {
         val account = Accounts(amount, accountName)
@@ -62,14 +62,14 @@ object DataProvider {
         addAccount(0.0, "Cash")
         addAccount(0.0, "Others")
 
-        addTransaction(income, "Business", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
-        addTransaction(expense, "Investment", "EasyPaisa","Notes Here", 2000.0, Date(), SystemClock.elapsedRealtime())
-        addTransaction(income, "Rent", "cash","Notes Here", 1500.0, Date(), SystemClock.elapsedRealtime())
-        addTransaction(expense, "Loan", "cash","Notes Here", 2500.0, Date(), SystemClock.elapsedRealtime())
-        addTransaction(income, "Salary", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
-        addTransaction(income, "Rent", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
-        addTransaction(income, "Others", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
-        addTransaction(expense, "Loan", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(income, "Business", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(expense, "Investment", "EasyPaisa","Notes Here", 2000.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(income, "Rent", "cash","Notes Here", 1500.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(expense, "Loan", "cash","Notes Here", 2500.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(income, "Salary", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(income, "Rent", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(income, "Others", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
+//        addTransaction(expense, "Loan", "cash","Notes Here", 500.0, Date(), SystemClock.elapsedRealtime())
     }
 
     fun getAccountColor(accountName : String) : Int {

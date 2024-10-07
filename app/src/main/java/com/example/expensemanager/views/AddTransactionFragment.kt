@@ -103,6 +103,10 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
 
         }
 
+        binding.saveBtn.setOnClickListener {
+
+        }
+
         return binding.root
 
     }

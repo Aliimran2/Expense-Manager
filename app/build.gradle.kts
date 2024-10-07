@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id ("kotlin-kapt")
+    id ("io.realm.kotlin")
 }
 
 
@@ -51,5 +52,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("io.realm:realm-gradle-plugin:10.11.1")
+    implementation ("io.realm.kotlin:library-base:1.10.0")
 }
