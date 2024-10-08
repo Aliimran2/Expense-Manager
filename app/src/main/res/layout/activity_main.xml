@@ -233,6 +233,7 @@
         android:layout_height="0dp"
         tools:listitem="@layout/row_transactions"
         android:id="@+id/transaction_recyclerview"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

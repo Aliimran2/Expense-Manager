@@ -12,8 +12,8 @@ import java.util.Date
      var account: String = ""
      var note: String = ""
      var amount: Double = 0.0
-     @Ignore
-     var date: Date = Date()  // Initialize with the current date
+@Ignore
+     var date: Date? = Date()
      @PrimaryKey
      var id: Long = 0L
  }

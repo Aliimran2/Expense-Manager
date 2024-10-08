@@ -2,13 +2,5 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
-}
-buildscript {
-    repositories {
-        google()
-        mavenCentral() // Add if missing
-    }
-    dependencies {
-        classpath ("io.realm.kotlin:gradle-plugin:1.10.0") // Adjust the version
-    }
+    id("io.realm.kotlin") version "1.16.0" apply false
 }

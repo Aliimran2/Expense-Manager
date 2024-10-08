@@ -52,5 +52,17 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("io.realm.kotlin:library-base:1.10.0")
+    implementation ("io.realm.kotlin:library-base:1.16.0")
+    // If using Device Sync
+    implementation ("io.realm.kotlin:library-sync:1.16.0")
+
+    val lifecycle_version = "2.8.6"
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 }
