@@ -12,8 +12,8 @@ import java.util.Date
      var account: String = ""
      var note: String = ""
      var amount: Double = 0.0
-@Ignore
-     var date: Date? = Date()
+     //important discovery
+     var date: Long = Date().time
      @PrimaryKey
      var id: Long = 0L
  }

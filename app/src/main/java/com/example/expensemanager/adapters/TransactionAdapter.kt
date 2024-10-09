@@ -26,7 +26,8 @@ class TransactionAdapter(
                 transactionAmount.text = transactions.amount.toString()
                 accountLabel.text = transactions.account
                 transactionCategory.backgroundTintList = context.getColorStateList(DataProvider.getAccountColor(transactions.category))
-                transactionDate.text = transactions.date?.let { Utils.dateFormat(it) }
+                //important discovery
+                transactionDate.text = Utils.dateFormatFromLong(transactions.date)
 
                 transactionIcon.setImageResource(category.categoryIcon)
                 transactionIcon.backgroundTintList = context.getColorStateList(category.categoryColor)

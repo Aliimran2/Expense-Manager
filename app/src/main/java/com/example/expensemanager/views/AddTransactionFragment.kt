@@ -70,7 +70,9 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
                val dateToShow = Utils.dateFormat(calendar.time)
-                transactions.date = calendar.time
+                //important discovery
+                val date = calendar.time
+                transactions.date = date.time
                 Log.d("DateCheck", "${calendar.time}")
 
                 binding.date.setText(dateToShow)
