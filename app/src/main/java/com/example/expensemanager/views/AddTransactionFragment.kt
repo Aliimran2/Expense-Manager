@@ -1,5 +1,6 @@
 package com.example.expensemanager.views
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.example.expensemanager.utils.DataProvider.income
 import com.example.expensemanager.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.Calendar
+import kotlin.math.exp
 
 
 class AddTransactionFragment : BottomSheetDialogFragment() {
@@ -71,8 +73,8 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
 
                val dateToShow = Utils.dateFormat(calendar.time)
                 //important discovery
-                val date = calendar.time
-                transactions.date = date.time
+
+                transactions.date = calendar.timeInMillis
                 Log.d("DateCheck", "${calendar.time}")
 
                 binding.date.setText(dateToShow)
@@ -120,15 +122,31 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
         }
 
         binding.saveBtn.setOnClickListener {
-            val id : Long = System.currentTimeMillis()
-            val amount = binding.amount.text.toString().toDouble()
-            val notes = binding.note.text.toString()
-            transactions.id = id
-            transactions.note = notes
-            transactions.amount = amount
-            expenseViewModel.addTransactions(transactions)
 
-            dismiss()
+            val id: Long = System.currentTimeMillis()
+            val amount = binding.amount.text.toString().toDoubleOrNull()
+            val notes = binding.note.text.toString()
+
+            if (amount != null && transactions.date != 0L) {
+                transactions.id = id
+                transactions.note = notes
+                if (transactions.type == income){
+                    transactions.amount = amount
+                } else if (transactions.type == expense) {
+                    transactions.amount = -1*amount
+                }
+
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = transactions.date
+                expenseViewModel.fetchAllTransactions(calendar.time)
+                expenseViewModel.addTransactions(transactions,calendar.time)
+
+                val activity = activity as MainActivity
+                activity.getTransactions()
+                dismiss()
+            } else {
+                Log.e("AddTransaction", "Invalid input: Amount or notes are empty, or date is not set") // Log error
+            }
         }
 
         return binding.root

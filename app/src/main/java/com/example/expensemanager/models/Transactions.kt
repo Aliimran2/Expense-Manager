@@ -7,6 +7,8 @@ import java.util.Date
 
 
  class Transactions : RealmObject {
+
+
      var type: String = ""
      var category: String = ""
      var account: String = ""
