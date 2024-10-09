@@ -28,12 +28,12 @@ class ExpenseViewModel(private val repository: ExpenseRepository) : ViewModel() 
     val totalBalance:LiveData<Double> get() = _totalBalance
 
 
-//    fun calculateTotalExpense (date: Date){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val income = repository.getTotalExpense(date)
-//            _totalExpense.postValue(income)
-//        }
-//    }
+    fun deleteTransaction(transaction: Transactions, date: Date){
+        viewModelScope.launch {
+            repository.deleteTransaction(transaction)
+            fetchAllTransactions(date)
+        }
+    }
 
 
 

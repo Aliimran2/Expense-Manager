@@ -5,6 +5,7 @@ import com.example.expensemanager.utils.DataProvider.expense
 import com.example.expensemanager.utils.DataProvider.income
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.delete
 import io.realm.kotlin.ext.query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,6 +21,16 @@ class ExpenseRepository {
 
     private fun getRealmInstance(): Realm {
         return Realm.open(config)
+    }
+
+    suspend fun deleteTransaction(transaction: Transactions){
+        withContext(Dispatchers.IO) {
+            val realm = getRealmInstance()
+            realm.writeBlocking {
+                val liveTransaction = findLatest(transaction)
+                liveTransaction?.let { delete(it) }
+            }
+        }
     }
 
     suspend fun addTransaction(transaction: Transactions) {

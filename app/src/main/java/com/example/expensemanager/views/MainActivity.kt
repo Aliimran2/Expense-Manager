@@ -38,8 +38,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "Transactions"
 
+
+
         expenseViewModel.transactions.observe(this) { transactions ->
-            transactionAdapter = TransactionAdapter(this, transactions)
+            transactionAdapter = TransactionAdapter(this, transactions.toMutableList()){
+                expenseViewModel.deleteTransaction(it, calendar.time)
+                updateDate()
+            }
             binding.transactionRecyclerview.adapter = transactionAdapter
         }
 
