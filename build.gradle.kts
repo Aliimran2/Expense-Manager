@@ -4,3 +4,4 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     id("io.realm.kotlin") version "1.16.0" apply false
 }
+

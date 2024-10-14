@@ -18,6 +18,8 @@ object DataProvider {
     const val SUMMARY = 3
     const val NOTES = 4
     var SELECTED_TAB = 0
+    var SELECTED_TAB_STAT = 0
+    var SELECTED_TAB_CATEGORY = ""
 
     val categoryList: MutableList<Category> = ArrayList()
     val accountList: MutableList<Accounts> = ArrayList()

@@ -2,24 +2,12 @@ package com.example.expensemanager.views.activities
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.expensemanager.R
-import com.example.expensemanager.adapters.TransactionAdapter
 import com.example.expensemanager.databinding.ActivityMainBinding
-import com.example.expensemanager.db.ExpenseRepository
-import com.example.expensemanager.db.ExpenseViewModel
-import com.example.expensemanager.db.ExpenseViewModelFactory
-import com.example.expensemanager.utils.DataProvider.DAILY
-import com.example.expensemanager.utils.DataProvider.MONTHLY
-import com.example.expensemanager.utils.DataProvider.SELECTED_TAB
-import com.example.expensemanager.utils.Utils
-import com.example.expensemanager.views.fragments.AddTransactionFragment
+import com.example.expensemanager.views.fragments.StatsFragment
 import com.example.expensemanager.views.fragments.TransactionFragment
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,7 +23,17 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "Transactions"
 
-        replaceFragment(TransactionFragment())
+
+        binding.bottomNavigation.setOnItemSelectedListener {item ->
+
+            when(item.itemId){
+                R.id.transactions -> replaceFragment(TransactionFragment())
+                R.id.stats -> replaceFragment(StatsFragment())
+
+            }
+
+            true
+        }
 
 
 

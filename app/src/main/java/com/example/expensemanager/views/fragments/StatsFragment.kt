@@ -1,62 +1,47 @@
 package com.example.expensemanager.views.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.expensemanager.R
+import com.anychart.AnyChart
+import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.chart.common.dataentry.ValueDataEntry
+import com.anychart.enums.Align
+import com.anychart.enums.LegendLayout
 import com.example.expensemanager.adapters.TransactionAdapter
-import com.example.expensemanager.databinding.FragmentTransactionBinding
+import com.example.expensemanager.databinding.FragmentStatsBinding
 import com.example.expensemanager.db.ExpenseRepository
 import com.example.expensemanager.db.ExpenseViewModel
 import com.example.expensemanager.db.ExpenseViewModelFactory
 import com.example.expensemanager.utils.DataProvider.DAILY
 import com.example.expensemanager.utils.DataProvider.MONTHLY
 import com.example.expensemanager.utils.DataProvider.SELECTED_TAB
-import com.example.expensemanager.utils.DataProvider.SELECTED_TAB_STAT
 import com.example.expensemanager.utils.Utils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.android.material.tabs.TabLayoutMediator
 import java.util.Calendar
 
 
-class TransactionFragment : Fragment() {
+class StatsFragment : Fragment() {
     private lateinit var calendar: Calendar
-    private lateinit var transactionAdapter: TransactionAdapter
     private val expenseViewModel: ExpenseViewModel by activityViewModels {
         ExpenseViewModelFactory(ExpenseRepository())
     }
+    private val binding by lazy { FragmentStatsBinding.inflate(layoutInflater) }
 
-    private val binding by lazy {
-        FragmentTransactionBinding.inflate(layoutInflater)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+       return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         calendar = Calendar.getInstance()
 
-        expenseViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
-            transactionAdapter = TransactionAdapter(requireContext(), transactions.toMutableList()) {
-                expenseViewModel.deleteTransaction(it, calendar.time)
-                updateDate()
-            }
-            binding.transactionRecyclerview.adapter = transactionAdapter
-        }
-
-        binding.floatingActionButton.setOnClickListener {
-            AddTransactionFragment().show(parentFragmentManager, null)
-        }
 
         binding.nextDate.setOnClickListener {
             changeDate(1)
@@ -65,12 +50,9 @@ class TransactionFragment : Fragment() {
         }
 
         binding.previousDate.setOnClickListener {
-           changeDate(-1)
+            changeDate(-1)
             expenseViewModel.fetchAllTransactions(calendar.time)
         }
-
-
-
 
         binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -92,32 +74,33 @@ class TransactionFragment : Fragment() {
 
 
 
-        expenseViewModel.totalIncome.observe(viewLifecycleOwner) { total ->
-            binding.incomeAmount.text = total.toString()
-            updateDate()
-        }
 
-        expenseViewModel.totalExpense.observe(viewLifecycleOwner) { total ->
-            binding.expenseAmount.text = total.toString()
-            updateDate()
-        }
+        val pie = AnyChart.pie()
 
-        expenseViewModel.totalBalance.observe(viewLifecycleOwner) {
-            binding.balanceAmount.text = it.toString()
-            updateDate()
-        }
+        val data: MutableList<DataEntry> = ArrayList()
+        data.add(ValueDataEntry("Apples", 6371664))
+        data.add(ValueDataEntry("Pears", 789622))
+        data.add(ValueDataEntry("Bananas", 7216301))
+        data.add(ValueDataEntry("Grapes", 1486621))
+        data.add(ValueDataEntry("Oranges", 1200000))
 
+        pie.data(data)
 
-        expenseViewModel.fetchAllTransactions(calendar.time)
-        updateDate()
+        pie.title("Fruits imported in 2015 (in kg)")
 
+        pie.labels().position("outside")
 
+        pie.legend().title().enabled(true)
+        pie.legend().title()
+            .text("Retail channels")
+            .padding(0.0, 0.0, 10.0, 0.0)
 
+        pie.legend()
+            .position("center-bottom")
+            .itemsLayout(LegendLayout.HORIZONTAL)
+            .align(Align.CENTER)
 
-
-
-
-
+            binding.anyChart.setChart(pie)
     }
 
 
@@ -136,7 +119,7 @@ class TransactionFragment : Fragment() {
     }
 
     private fun changeDate(step : Int){
-        if (SELECTED_TAB_STAT == DAILY){
+        if (SELECTED_TAB == DAILY){
             calendar.add(Calendar.DATE, step)
         } else if (SELECTED_TAB == MONTHLY){
             calendar.add(Calendar.MONTH, step)
@@ -144,7 +127,5 @@ class TransactionFragment : Fragment() {
 
         updateDate()
     }
-
-
 
 }
