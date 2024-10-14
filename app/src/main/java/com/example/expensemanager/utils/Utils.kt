@@ -11,6 +11,11 @@ class Utils {
             return sdf.format(dateToString)
         }
 
+        fun dateFormatByMonth(dateToString : Date) : String {
+            val sdf = SimpleDateFormat("MMMM, yyyy", Locale.getDefault())
+            return sdf.format(dateToString)
+        }
+
 
         fun dateFormatFromLong(timeStamp : Long) : String {
             val date = Date(timeStamp)

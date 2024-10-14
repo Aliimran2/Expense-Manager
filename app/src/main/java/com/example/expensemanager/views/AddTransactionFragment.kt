@@ -1,6 +1,5 @@
 package com.example.expensemanager.views
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -20,12 +19,11 @@ import com.example.expensemanager.databinding.ListDialogBinding
 import com.example.expensemanager.db.ExpenseViewModel
 import com.example.expensemanager.models.Transactions
 import com.example.expensemanager.utils.DataProvider
-import com.example.expensemanager.utils.DataProvider.expense
-import com.example.expensemanager.utils.DataProvider.income
+import com.example.expensemanager.utils.DataProvider.EXPENSE
+import com.example.expensemanager.utils.DataProvider.INCOME
 import com.example.expensemanager.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.Calendar
-import kotlin.math.exp
 
 
 class AddTransactionFragment : BottomSheetDialogFragment() {
@@ -49,7 +47,7 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
             binding.incomeBtn.setTextColor(requireContext().getColor(R.color.green))
             binding.expenseBtn.background = AppCompatResources.getDrawable(requireContext(), R.drawable.default_selector)
             binding.expenseBtn.setTextColor(requireContext().getColor(R.color.black))
-            transactions.type = income
+            transactions.type = INCOME
 
 
         }
@@ -60,7 +58,7 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
             binding.expenseBtn.background = AppCompatResources.getDrawable(requireContext(), R.drawable.expense_selector)
             binding.expenseBtn.setTextColor(requireContext().getColor(R.color.orange))
 
-            transactions.type = expense
+            transactions.type = EXPENSE
         }
 
         binding.date.setOnClickListener {
@@ -130,9 +128,9 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
             if (amount != null && transactions.date != 0L) {
                 transactions.id = id
                 transactions.note = notes
-                if (transactions.type == income){
+                if (transactions.type == INCOME){
                     transactions.amount = amount
-                } else if (transactions.type == expense) {
+                } else if (transactions.type == EXPENSE) {
                     transactions.amount = -1*amount
                 }
 

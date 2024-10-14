@@ -36,10 +36,10 @@ class TransactionAdapter(
                 transactionIcon.setImageResource(category.categoryIcon)
                 transactionIcon.backgroundTintList = context.getColorStateList(category.categoryColor)
 
-                if (transactions.type == DataProvider.income){
+                if (transactions.type == DataProvider.INCOME){
                     val color = ContextCompat.getColor(context, R.color.green)
                     transactionAmount.setTextColor(color)
-                } else if (transactions.type == DataProvider.expense) {
+                } else if (transactions.type == DataProvider.EXPENSE) {
                     val color = ContextCompat.getColor(context, R.color.orangeDark)
                     transactionAmount.setTextColor(color)
                 }

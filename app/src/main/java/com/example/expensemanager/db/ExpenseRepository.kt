@@ -1,11 +1,13 @@
 package com.example.expensemanager.db
 
 import com.example.expensemanager.models.Transactions
-import com.example.expensemanager.utils.DataProvider.expense
-import com.example.expensemanager.utils.DataProvider.income
+import com.example.expensemanager.utils.DataProvider.DAILY
+import com.example.expensemanager.utils.DataProvider.EXPENSE
+import com.example.expensemanager.utils.DataProvider.INCOME
+import com.example.expensemanager.utils.DataProvider.MONTHLY
+import com.example.expensemanager.utils.DataProvider.SELECTED_TAB
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
-import io.realm.kotlin.delete
 import io.realm.kotlin.ext.query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,7 +25,7 @@ class ExpenseRepository {
         return Realm.open(config)
     }
 
-    suspend fun deleteTransaction(transaction: Transactions){
+    suspend fun deleteTransaction(transaction: Transactions) {
         withContext(Dispatchers.IO) {
             val realm = getRealmInstance()
             realm.writeBlocking {
@@ -42,12 +44,7 @@ class ExpenseRepository {
         }
     }
 
-    fun getAllTransactions(): List<Transactions> {
-        val realm = getRealmInstance()
-        return realm.query<Transactions>().find()
-    }
-
-    fun getTotalIncome(date: Date):Double{
+    fun getTotalIncome(date: Date): Double {
 
         val realm = getRealmInstance()
         //get the start and the end of the day
@@ -65,17 +62,16 @@ class ExpenseRepository {
         calendar.set(Calendar.MILLISECOND, 999)
         val endDate = calendar.timeInMillis
 
-         val incomeTransactions = realm.query<Transactions>(
-             "type == $0 AND date >= $1 AND date <= $2",
-             income,
-             startDate,
-             endDate
-         ).find()
+        val incomeTransactions = realm.query<Transactions>(
+            "type == $0 AND date >= $1 AND date <= $2",
+            INCOME,
+            startDate,
+            endDate
+        ).find()
 
 
-
-        var totalIncome  = 0.0
-        for (transaction in incomeTransactions){
+        var totalIncome = 0.0
+        for (transaction in incomeTransactions) {
             totalIncome += transaction.amount
         }
         return totalIncome
@@ -83,10 +79,9 @@ class ExpenseRepository {
     }
 
 
-    fun getTotalExpense(date: Date):Double{
+    fun getTotalExpense(date: Date): Double {
 
         val realm = getRealmInstance()
-        //get the start and the end of the day
         val calendar = Calendar.getInstance()
         calendar.time = date
         calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -103,15 +98,14 @@ class ExpenseRepository {
 
         val expenseTransaction = realm.query<Transactions>(
             "type == $0 AND date >= $1 AND date <= $2",
-            expense,
+            EXPENSE,
             startDate,
             endDate
         ).find()
 
 
-
-        var totalExpense  = 0.0
-        for (transaction in expenseTransaction){
+        var totalExpense = 0.0
+        for (transaction in expenseTransaction) {
             totalExpense += transaction.amount
         }
         return totalExpense
@@ -119,27 +113,53 @@ class ExpenseRepository {
     }
 
 
-
-
-    fun getAllTransactionsForDate(date: Date) : List<Transactions> {
+    fun getAllTransactionsForDate(date: Date): List<Transactions> {
         val realm = getRealmInstance()
-        //get the start and the end of the day
         val calendar = Calendar.getInstance()
-        calendar.time = date
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        val startDate = calendar.timeInMillis
+        when (SELECTED_TAB) {
 
-        calendar.set(Calendar.HOUR_OF_DAY, 23)
-        calendar.set(Calendar.MINUTE, 59)
-        calendar.set(Calendar.SECOND, 59)
-        calendar.set(Calendar.MILLISECOND, 999)
-        val endDate = calendar.timeInMillis
+            DAILY -> {
+                calendar.time = date
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                val startDate = calendar.timeInMillis
 
-        return realm.query<Transactions>("date >= $0 AND date <= $1", startDate, endDate).find()
+                calendar.set(Calendar.HOUR_OF_DAY, 23)
+                calendar.set(Calendar.MINUTE, 59)
+                calendar.set(Calendar.SECOND, 59)
+                calendar.set(Calendar.MILLISECOND, 999)
+                val endDate = calendar.timeInMillis
 
+                return realm.query<Transactions>("date >= $0 AND date <= $1", startDate, endDate)
+                    .find()
+            }
+
+            MONTHLY -> {
+                calendar.time = date
+                calendar.set(Calendar.DAY_OF_MONTH, 1)
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                val startDate = calendar.timeInMillis
+
+                calendar.add(Calendar.MONTH, 1)
+                calendar.set(Calendar.DAY_OF_MONTH, 1)
+                calendar.add(Calendar.DATE, -1) // Move to last day of previous month
+                calendar.set(Calendar.HOUR_OF_DAY, 23)
+                calendar.set(Calendar.MINUTE, 59)
+                calendar.set(Calendar.SECOND, 59)
+                calendar.set(Calendar.MILLISECOND, 999)
+                val endDate = calendar.timeInMillis
+
+                return realm.query<Transactions>("date >= $0 AND date<=$1", startDate, endDate).find()
+            }
+            else -> return emptyList()
+
+
+        }
 
 
     }

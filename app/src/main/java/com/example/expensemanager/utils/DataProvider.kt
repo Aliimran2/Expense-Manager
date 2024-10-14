@@ -1,16 +1,23 @@
 package com.example.expensemanager.utils
 
-import android.os.SystemClock
 import com.example.expensemanager.R
 import com.example.expensemanager.models.Accounts
 import com.example.expensemanager.models.Category
 import com.example.expensemanager.models.Transactions
-import java.util.Date
 
 object DataProvider {
 
-    const val income = "INCOME"
-    const val expense = "EXPENSE"
+    const val INCOME = "INCOME"
+    const val EXPENSE = "EXPENSE"
+
+    const val DAILY = 0
+    const val MONTHLY = 1
+    const val CALENDER = 2
+    const val SUMMARY = 3
+    const val NOTES = 4
+
+
+    var SELECTED_TAB = 0
 
     val categoryList: MutableList<Category> = ArrayList()
     val accountList: MutableList<Accounts> = ArrayList()
