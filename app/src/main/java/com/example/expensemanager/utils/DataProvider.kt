@@ -4,8 +4,54 @@ import com.example.expensemanager.R
 import com.example.expensemanager.models.Accounts
 import com.example.expensemanager.models.Category
 import com.example.expensemanager.models.Transactions
+import java.util.Calendar
+import java.util.Date
 
 object DataProvider {
+
+   fun setStartTimeOfDay(date: Date) : Long {
+       val calendar = Calendar.getInstance()
+       calendar.time = date
+       calendar.set(Calendar.HOUR_OF_DAY, 0)
+       calendar.set(Calendar.MINUTE, 0)
+       calendar.set(Calendar.SECOND, 0)
+       calendar.set(Calendar.MILLISECOND, 0)
+       return calendar.timeInMillis
+   }
+
+    fun setEndTimeOfDay(date: Date) : Long {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
+        return calendar.timeInMillis
+    }
+
+    fun setStartOfMonth(date: Date) : Long {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.timeInMillis
+    }
+
+    fun setEndOfMonth(date: Date) : Long {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.add(Calendar.MONTH, 1)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.add(Calendar.DATE, -1) // Move to last day of previous month
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
+        return calendar.timeInMillis
+    }
 
     const val INCOME = "INCOME"
     const val EXPENSE = "EXPENSE"
