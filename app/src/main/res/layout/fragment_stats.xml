@@ -73,7 +73,7 @@
     </com.google.android.material.tabs.TabLayout>
 
 
-    <com.anychart.AnyChartView
+    <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/anyChart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -81,4 +81,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

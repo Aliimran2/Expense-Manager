@@ -47,10 +47,11 @@ class TransactionFragment : Fragment() {
         calendar = Calendar.getInstance()
 
         expenseViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
-            transactionAdapter = TransactionAdapter(requireContext(), transactions.toMutableList()) {
-                expenseViewModel.deleteTransaction(it, calendar.time)
-                updateDate()
-            }
+            transactionAdapter =
+                TransactionAdapter(requireContext(), transactions.toMutableList()) {
+                    expenseViewModel.deleteTransaction(it, calendar.time)
+                    updateDate()
+                }
             binding.transactionRecyclerview.adapter = transactionAdapter
         }
 
@@ -65,7 +66,7 @@ class TransactionFragment : Fragment() {
         }
 
         binding.previousDate.setOnClickListener {
-           changeDate(-1)
+            changeDate(-1)
             expenseViewModel.fetchAllTransactions(calendar.time)
         }
 
@@ -86,6 +87,7 @@ class TransactionFragment : Fragment() {
 
 
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
@@ -107,22 +109,14 @@ class TransactionFragment : Fragment() {
             updateDate()
         }
 
-
         expenseViewModel.fetchAllTransactions(calendar.time)
         updateDate()
-
-
-
-
-
-
-
 
     }
 
 
     private fun updateDate() {
-        if (SELECTED_TAB == DAILY){
+        if (SELECTED_TAB == DAILY) {
             val date = Utils.dateFormat(calendar.time)
             binding.dateText.text = date
         } else if (SELECTED_TAB == MONTHLY) {
@@ -135,16 +129,15 @@ class TransactionFragment : Fragment() {
 
     }
 
-    private fun changeDate(step : Int){
-        if (SELECTED_TAB_STAT == DAILY){
+    private fun changeDate(step: Int) {
+        if (SELECTED_TAB_STAT == DAILY) {
             calendar.add(Calendar.DATE, step)
-        } else if (SELECTED_TAB == MONTHLY){
+        } else if (SELECTED_TAB == MONTHLY) {
             calendar.add(Calendar.MONTH, step)
         }
 
         updateDate()
     }
-
 
 
 }
