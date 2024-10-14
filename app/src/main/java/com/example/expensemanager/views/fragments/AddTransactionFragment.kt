@@ -1,4 +1,4 @@
-package com.example.expensemanager.views
+package com.example.expensemanager.views.fragments
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,12 +17,15 @@ import com.example.expensemanager.adapters.AccountAdapter
 import com.example.expensemanager.adapters.CategoryAdapter
 import com.example.expensemanager.databinding.FragmentAddTransactionBinding
 import com.example.expensemanager.databinding.ListDialogBinding
+import com.example.expensemanager.db.ExpenseRepository
 import com.example.expensemanager.db.ExpenseViewModel
+import com.example.expensemanager.db.ExpenseViewModelFactory
 import com.example.expensemanager.models.Transactions
 import com.example.expensemanager.utils.DataProvider
 import com.example.expensemanager.utils.DataProvider.EXPENSE
 import com.example.expensemanager.utils.DataProvider.INCOME
 import com.example.expensemanager.utils.Utils
+import com.example.expensemanager.views.activities.MainActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.Calendar
 
@@ -30,7 +34,9 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentAddTransactionBinding? = null
     private val binding get() = _binding!!
-    private val expenseViewModel : ExpenseViewModel by activityViewModels()
+    private val expenseViewModel : ExpenseViewModel by activityViewModels{
+        ExpenseViewModelFactory(ExpenseRepository())
+    }
     private lateinit var transactions: Transactions
 
 
@@ -130,7 +136,8 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
                 transactions.note = notes
                 if (transactions.type == INCOME){
                     transactions.amount = amount
-                } else if (transactions.type == EXPENSE) {
+                } else {
+                    transactions.type = EXPENSE
                     transactions.amount = -1*amount
                 }
 
@@ -138,9 +145,9 @@ class AddTransactionFragment : BottomSheetDialogFragment() {
                 calendar.timeInMillis = transactions.date
                 expenseViewModel.fetchAllTransactions(calendar.time)
                 expenseViewModel.addTransactions(transactions,calendar.time)
+                Toast.makeText(requireContext(), "Data is saved", Toast.LENGTH_SHORT).show()
 
-                val activity = activity as MainActivity
-                activity.getTransactions()
+
                 dismiss()
             } else {
                 Log.e("AddTransaction", "Invalid input: Amount or notes are empty, or date is not set") // Log error

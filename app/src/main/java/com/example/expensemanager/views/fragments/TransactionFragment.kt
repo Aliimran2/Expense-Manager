@@ -1,16 +1,15 @@
-package com.example.expensemanager.views
+package com.example.expensemanager.views.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.activityViewModels
 import com.example.expensemanager.R
 import com.example.expensemanager.adapters.TransactionAdapter
-import com.example.expensemanager.databinding.ActivityMainBinding
+import com.example.expensemanager.databinding.FragmentTransactionBinding
 import com.example.expensemanager.db.ExpenseRepository
 import com.example.expensemanager.db.ExpenseViewModel
 import com.example.expensemanager.db.ExpenseViewModelFactory
@@ -18,35 +17,35 @@ import com.example.expensemanager.utils.DataProvider.DAILY
 import com.example.expensemanager.utils.DataProvider.MONTHLY
 import com.example.expensemanager.utils.DataProvider.SELECTED_TAB
 import com.example.expensemanager.utils.Utils
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import java.util.Calendar
 
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class TransactionFragment : Fragment() {
     private lateinit var calendar: Calendar
     private lateinit var transactionAdapter: TransactionAdapter
-
-
-    private val expenseViewModel: ExpenseViewModel by viewModels {
+    private val expenseViewModel: ExpenseViewModel by activityViewModels {
         ExpenseViewModelFactory(ExpenseRepository())
     }
 
+    private val binding by lazy {
+        FragmentTransactionBinding.inflate(layoutInflater)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         calendar = Calendar.getInstance()
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = "Transactions"
-
-        expenseViewModel.transactions.observe(this) { transactions ->
-            transactionAdapter = TransactionAdapter(this, transactions.toMutableList()){
+        expenseViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+            transactionAdapter = TransactionAdapter(requireContext(), transactions.toMutableList()) {
                 expenseViewModel.deleteTransaction(it, calendar.time)
                 updateDate()
             }
@@ -54,13 +53,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            AddTransactionFragment().show(supportFragmentManager, null)
+            AddTransactionFragment().show(parentFragmentManager, null)
         }
 
         binding.nextDate.setOnClickListener {
-            if (SELECTED_TAB == DAILY){
+            if (SELECTED_TAB == DAILY) {
                 calendar.add(Calendar.DATE, 1)
-            } else if (SELECTED_TAB == MONTHLY){
+            } else if (SELECTED_TAB == MONTHLY) {
                 calendar.add(Calendar.MONTH, 1)
             }
 
@@ -71,9 +70,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.previousDate.setOnClickListener {
-            if (SELECTED_TAB == DAILY){
+            if (SELECTED_TAB == DAILY) {
                 calendar.add(Calendar.DATE, -1)
-            } else if (SELECTED_TAB == MONTHLY){
+            } else if (SELECTED_TAB == MONTHLY) {
                 calendar.add(Calendar.MONTH, -1)
             }
             expenseViewModel.fetchAllTransactions(calendar.time)
@@ -81,13 +80,13 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener{
+        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
-                    if (tab.text == "Daily"){
+                    if (tab.text == "Daily") {
                         SELECTED_TAB = 0
                         updateDate()
-                    } else  if (tab.text == "Monthly"){
+                    } else if (tab.text == "Monthly") {
                         SELECTED_TAB = 1
                         updateDate()
                     }
@@ -106,17 +105,17 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        expenseViewModel.totalIncome.observe(this){total ->
+        expenseViewModel.totalIncome.observe(viewLifecycleOwner) { total ->
             binding.incomeAmount.text = total.toString()
             updateDate()
         }
 
-        expenseViewModel.totalExpense.observe(this){total ->
+        expenseViewModel.totalExpense.observe(viewLifecycleOwner) { total ->
             binding.expenseAmount.text = total.toString()
             updateDate()
         }
 
-        expenseViewModel.totalBalance.observe(this){
+        expenseViewModel.totalBalance.observe(viewLifecycleOwner) {
             binding.balanceAmount.text = it.toString()
             updateDate()
         }
@@ -124,6 +123,8 @@ class MainActivity : AppCompatActivity() {
 
         expenseViewModel.fetchAllTransactions(calendar.time)
         updateDate()
+
+
 
     }
 
@@ -140,16 +141,10 @@ class MainActivity : AppCompatActivity() {
             binding.dateText.text = date
         }
 
-
-
         expenseViewModel.fetchAllTransactions(calendar.time)
         expenseViewModel.calculateTotal(calendar.time)
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.top_menu, menu)
-        return super.onCreateOptionsMenu(menu)
 
-    }
 }

@@ -2,6 +2,7 @@ package com.example.expensemanager.adapters
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -14,13 +15,14 @@ import com.example.expensemanager.utils.DataProvider
 import com.example.expensemanager.utils.Utils
 
 class TransactionAdapter(
-    val context: Context,
-    val transactionsList: MutableList<Transactions>,
+    private val context: Context,
+    private val transactionsList: MutableList<Transactions>,
     val onDeleteClick : (Transactions) -> Unit
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionVH>() {
 
     class TransactionVH(val binding: RowTransactionsBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(transactions: Transactions) {
 
             binding.apply {
@@ -64,11 +66,14 @@ class TransactionAdapter(
     override fun onBindViewHolder(holder: TransactionVH, position: Int) {
         val currentTransaction = transactionsList[position]
         holder.bind(currentTransaction)
+
+
+        
         holder.itemView.setOnLongClickListener {
-             AlertDialog.Builder(context)
+            AlertDialog.Builder(context)
                 .setTitle("Delete Entry")
                 .setMessage("Do you want to delete this transaction?")
-                .setPositiveButton("Yes"){dialog, _ ->
+                .setPositiveButton("Yes") { dialog, _ ->
                     Toast.makeText(context, "Deleting", Toast.LENGTH_SHORT).show()
                     onDeleteClick(currentTransaction)
                     transactionsList.removeAt(position)
@@ -78,6 +83,7 @@ class TransactionAdapter(
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
+
 
             true
         }

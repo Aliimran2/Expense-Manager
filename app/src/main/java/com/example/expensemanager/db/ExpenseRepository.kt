@@ -47,7 +47,6 @@ class ExpenseRepository {
 
     fun getTotalIncome(date: Date): Double {
         val realm = getRealmInstance()
-        val calendar = Calendar.getInstance()
 
         when(SELECTED_TAB){
             DAILY -> {
@@ -96,7 +95,6 @@ class ExpenseRepository {
     fun getTotalExpense(date: Date): Double {
 
         val realm = getRealmInstance()
-        val calendar = Calendar.getInstance()
 
         when(SELECTED_TAB){
             DAILY -> {

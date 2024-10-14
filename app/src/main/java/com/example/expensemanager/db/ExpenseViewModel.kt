@@ -51,14 +51,12 @@ class ExpenseViewModel(private val repository: ExpenseRepository) : ViewModel() 
     fun addTransactions(transaction:Transactions, date: Date) {
         viewModelScope.launch {
             repository.addTransaction(transaction)
-
             fetchAllTransactions(date)
         }
     }
 
 
     fun fetchAllTransactions(date: Date) {
-
         val transList = repository.getAllTransactionsForDate(date)
         _transactions.postValue(transList)
     }
